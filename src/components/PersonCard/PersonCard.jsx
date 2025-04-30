@@ -1,6 +1,7 @@
 import { FaPhone } from "react-icons/fa";
 import { IoIosMail } from "react-icons/io";
 import { FaDollarSign } from "react-icons/fa";
+import './personCard.css';
 
 const PersonCard = (props) => {
     const { name, title, salary, phone, email, animal, startDate, location, department } = props;

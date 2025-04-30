@@ -7,61 +7,9 @@
   padding: 1rem;
 }
 
-header, footer {
-  position: fixed;
-  left: 0;
-  width: 100%;
-  background-color: var(--header-footer-bg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid var(--border-color);
-  z-index: 10;
-}
-
-header {
-  top: 0;
-}
-
-footer {
-  bottom: 0;
-  border-top: 1px solid var(--border-color);
-  font-size: 0.9rem;
-  color: var(--muted-text);
-}
-
 h1 {
   font-size: 2rem;
   font-weight: 600;
   color: var(--accent);
 }
 
-.person-card {
-  background-color: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  margin: 1rem 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease;
-}
-
-.person-card:hover {
-  transform: translateY(-4px);
-}
-
-.person-card h3 {
-  font-size: 1.25rem;
-  color: var(--accent);
-  margin-bottom: 0.5rem;
-}
-
-.person-card p {
-  margin-bottom: 0.3rem;
-  color: var(--text-color);
-}
-
-.person-card p strong {
-  color: var(--muted-text);
-}

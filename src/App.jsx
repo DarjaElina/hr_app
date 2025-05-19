@@ -3,23 +3,10 @@ import "./App.css";
 import About from "./pages/About";
 import Persons from "./pages/Persons";
 import AddEmployee from "./pages/AddEmployee";
-import persons from "./data/persons";
-import { useState } from "react";
 import Root from "./pages/Root";
 
 
 const App = () => {
-  const [personsData, setPersonsData] = useState(persons);
-
-  const addEmployeeHandler = (newPerson) => {
-    console.log('new person in app is', newPerson)
-    setPersonsData((prev) => [
-      ...prev,
-      { ...newPerson },
-    ]);
-  };
-
-  console.log('persons data in app is', personsData)
 
   const router = createBrowserRouter([
     {
@@ -28,7 +15,7 @@ const App = () => {
       children: [
         {
           index: true,
-          element: <Persons persons={personsData} />,
+          element: <Persons/>,
         },
         {
           path: 'about',
@@ -36,7 +23,7 @@ const App = () => {
         },
         {
           path: 'add',
-          element: <AddEmployee onAddEmployee={addEmployeeHandler} />,
+          element: <AddEmployee/>,
         },
       ],
     },

@@ -1,24 +1,30 @@
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { Outlet } from "react-router";
-import { useState } from "react";
-import persons from '../data/persons'
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Root = () => {
-  const [personsData, setPersonsData] = useState(persons);
+  const [employeesData, setEmployeesData] = useState([]);
 
-  const addEmployeeHandler = (newPerson) => {
-    console.log('new person in app is', newPerson)
-    setPersonsData((prev) => [
-      ...prev,
-      { ...newPerson, id: Date.now(), skills: newPerson.skills.split(",") },
-    ]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/employees")
+      .then((res) => setEmployeesData(res.data))
+      .catch((err) => console.error("Failed to fetch books", err));
+  }, []);
+
+  const addEmployeeHandler = (newEmployee) => {
+    setEmployeesData((prev) => [...prev, newEmployee]);
   };
   return (
     <>
       <Header />
       <main>
-        <Outlet context={{persons: personsData, onAddEmployee: addEmployeeHandler}}/>
+        <Outlet context={{
+            persons: employeesData,
+            onAddEmployee: addEmployeeHandler,
+          }}/>
       </main>
       <Footer year={2025} />
     </>

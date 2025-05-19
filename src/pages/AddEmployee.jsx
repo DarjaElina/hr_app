@@ -6,7 +6,7 @@ const AddEmployee = ({onAddEmployee}) => {
   return (
     <>
     <Header/>
-    <AddEmployeeForm onAddEmployee={onAddEmployee}/>
+      <AddEmployeeForm onAddEmployee={onAddEmployee}/>
     <Footer/>
     </>
   )

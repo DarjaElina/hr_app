@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useOutletContext } from "react-router";
 import './AddEmployeeForm.css';
+import axios from "axios";
 
 const AddEmployeeForm = () => {
   const [formData, setFormData] = useState({
@@ -56,21 +57,27 @@ const AddEmployeeForm = () => {
 
     setErrors({});
     const newEmployee = { ...formData, price: parseFloat(formData.salary) };
-    onAddEmployee(newEmployee);
-    navigate("/");
-
-    setFormData({
-      name: "",
-      title: "",
-      salary: "",
-      phone: "",
-      email: "",
-      animal: "",
-      startDate: "",
-      location: "",
-      department: "",
-      skills: "",
-    });
+    axios
+      .post("http://localhost:3001/employees", newEmployee)
+      .then((res) => {
+        onAddEmployee(res.data);
+        navigate("/");
+        setFormData({
+          name: "",
+          title: "",
+          salary: "",
+          phone: "",
+          email: "",
+          animal: "",
+          startDate: "",
+          location: "",
+          department: "",
+          skills: "",
+        });
+      })
+      .catch((err) => {
+        console.error("Failed to add book:", err);
+      });
   };
 
   const renderInput = (name, type = "text", placeholder) => (

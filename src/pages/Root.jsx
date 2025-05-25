@@ -1,29 +1,30 @@
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { Outlet } from "react-router";
-import { useState, useEffect } from "react";
-import axios from "axios";
+// import { useState, useEffect } from "react";
+// import axios from "axios";
+import useEmployees from "../hooks/useEmployees";
 
 const Root = () => {
-  const [employeesData, setEmployeesData] = useState([]);
+  // const [employees, setEmployees] = useState([]);
+  const {employees, setEmployees} = useEmployees();
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/employees")
-      .then((res) => setEmployeesData(res.data))
-      .catch((err) => console.error("Failed to fetch books", err));
-  }, []);
-
-  const addEmployeeHandler = (newEmployee) => {
-    setEmployeesData((prev) => [...prev, newEmployee]);
-  };
+  // useEffect(() => {
+  //   axios
+  //     .get("http://localhost:3001/employees")
+  //     .then((res) => setEmployees(res.data))
+  //     .catch((err) => {
+  //       console.error("Failed to fetch books", err)
+  //     });
+  // }, []);
+  console.log(employees)
   return (
     <>
       <Header />
       <main>
         <Outlet context={{
-            persons: employeesData,
-            onAddEmployee: addEmployeeHandler,
+            employees,
+            setEmployees,
           }}/>
       </main>
       <Footer year={2025} />

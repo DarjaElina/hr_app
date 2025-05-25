@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useOutletContext } from "react-router";
 import './AddEmployeeForm.css';
-import axios from "axios";
+import useCreateEmployee from "../../hooks/useCreateEmployee";
 
 const AddEmployeeForm = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +20,8 @@ const AddEmployeeForm = () => {
 
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const { onAddEmployee } = useOutletContext();
+  const { setEmployees } = useOutletContext();
+  const [createEmployee, {loading, error}] = useCreateEmployee();
 
   const validate = () => {
     const newErrors = {};
@@ -46,38 +47,36 @@ const AddEmployeeForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const validationErrors = validate();
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const validationErrors = validate();
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
 
-    setErrors({});
-    const newEmployee = { ...formData, price: parseFloat(formData.salary) };
-    axios
-      .post("http://localhost:3001/employees", newEmployee)
-      .then((res) => {
-        onAddEmployee(res.data);
-        navigate("/");
-        setFormData({
-          name: "",
-          title: "",
-          salary: "",
-          phone: "",
-          email: "",
-          animal: "",
-          startDate: "",
-          location: "",
-          department: "",
-          skills: "",
-        });
-      })
-      .catch((err) => {
-        console.error("Failed to add book:", err);
+      setErrors({});
+      const newEmployee = { ...formData, price: parseFloat(formData.salary), skills: formData.skills.trim().split(',') };
+      const data = await createEmployee(newEmployee);
+      setEmployees((prev) => [...prev, data]);
+      setFormData({
+        name: "",
+        title: "",
+        salary: "",
+        phone: "",
+        email: "",
+        animal: "",
+        startDate: "",
+        location: "",
+        department: "",
+        skills: "",
       });
+      navigate("/");
+    } catch (e) {
+      console.log("Error fetching employee", e)
+    }
   };
 
   const renderInput = (name, type = "text", placeholder) => (
@@ -108,7 +107,7 @@ const AddEmployeeForm = () => {
         {renderInput("location", "text", "Location")}
         {renderInput("department", "text", "Department")}
         {renderInput("skills", "text", "Skills")}
-        <button type="submit" className="submit-button">Add Employee</button>
+        <button disabled={loading} type="submit" className="submit-button">Add Employee</button>
       </form>
     </div>
   );

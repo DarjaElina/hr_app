@@ -1,12 +1,12 @@
-import PersonCard from "../PersonCard/PersonCard"
+import EmployeeCard from "../EmployeeCard/EmployeeCard"
 import { useOutletContext } from "react-router";
 
-const PersonList = () => {
-  const {persons} = useOutletContext();
+const EmployeeList = () => {
+  const {employees} = useOutletContext();
   return (
    <ul>
-    {persons.map(p => (
-        <PersonCard
+    {employees.map(p => (
+        <EmployeeCard
           key={p.id}
           name={p.name}
           title={p.title}
@@ -18,10 +18,11 @@ const PersonList = () => {
           location={p.location}
           department={p.department}
           skills={p.skills}
+          id={p.id}
         />
       ))}
    </ul>
   )
 }
 
-export default PersonList;
+export default EmployeeList;

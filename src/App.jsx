@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./App.css";
 import About from "./pages/About";
-import Persons from "./pages/Persons";
+import Persons from "./pages/Employes";
 import AddEmployee from "./pages/AddEmployee";
 import Root from "./pages/Root";
 

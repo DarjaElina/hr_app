@@ -1,21 +1,19 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-import "./App.css";
-import About from "./pages/About";
+import About from "./pages/AboutUs";
 import Persons from "./pages/Employes";
 import AddEmployee from "./pages/AddEmployee";
 import Root from "./pages/Root";
-
 
 const App = () => {
 
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Root />,
+      element: <Root/>,
       children: [
         {
           index: true,
-          element: <Persons/>,
+          element: <Persons />,
         },
         {
           path: 'about',
@@ -23,7 +21,7 @@ const App = () => {
         },
         {
           path: 'add',
-          element: <AddEmployee/>,
+          element: <AddEmployee />,
         },
       ],
     },

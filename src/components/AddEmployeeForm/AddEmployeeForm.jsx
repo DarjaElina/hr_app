@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
-import { useOutletContext } from "react-router";
-import './AddEmployeeForm.css';
 import useCreateEmployee from "../../hooks/useCreateEmployee";
+import styles from "./AddEmployeeForm.module.css";
+import toast from "react-hot-toast";
 
 const AddEmployeeForm = () => {
   const [formData, setFormData] = useState({
@@ -19,13 +18,10 @@ const AddEmployeeForm = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
-  const { setEmployees } = useOutletContext();
-  const [createEmployee, {loading, error}] = useCreateEmployee();
+  const [createEmployee, { loading }] = useCreateEmployee();
 
   const validate = () => {
     const newErrors = {};
-
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.title.trim()) newErrors.title = "Title is required.";
     if (!formData.salary || isNaN(formData.salary)) newErrors.salary = "Valid salary is required.";
@@ -38,7 +34,6 @@ const AddEmployeeForm = () => {
     if (!formData.startDate) newErrors.startDate = "Start date is required.";
     if (!formData.location.trim()) newErrors.location = "Location is required.";
     if (!formData.department.trim()) newErrors.department = "Department is required.";
-
     return newErrors;
   };
 
@@ -48,55 +43,52 @@ const AddEmployeeForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setErrors({});
+  
+
     try {
-      const validationErrors = validate();
-
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
-        return;
-      }
-
-      setErrors({});
-      const newEmployee = { ...formData, price: parseFloat(formData.salary), skills: formData.skills.trim().split(',') };
-      const data = await createEmployee(newEmployee);
-      setEmployees((prev) => [...prev, data]);
-      setFormData({
-        name: "",
-        title: "",
-        salary: "",
-        phone: "",
-        email: "",
-        animal: "",
-        startDate: "",
-        location: "",
-        department: "",
-        skills: "",
-      });
-      navigate("/");
-    } catch (e) {
-      console.log("Error fetching employee", e)
+      const newEmployee = {
+        ...formData,
+        salary: parseFloat(formData.salary),
+        skills: formData.skills.trim().split(','),
+      };
+      await createEmployee(newEmployee);
+      toast.success("Employee added successfully!");
+    } catch (err) {
+      toast.error("Failed to add employee.", err);
     }
   };
 
   const renderInput = (name, type = "text", placeholder) => (
-    <div className="form-group">
+    <div className={styles.formGroup}>
       <input
         type={type}
         name={name}
         placeholder={placeholder}
         value={formData[name]}
         onChange={handleChange}
-        className={errors[name] ? "input-error" : ""}
+        className={`${styles.input} ${
+          errors[name] ? styles.inputError : styles.inputNormal
+        }`}
       />
-      {errors[name] && <div className="error-message">{errors[name]}</div>}
+      {errors[name] && (
+        <p className={styles.errorMessage}>{errors[name]}</p>
+      )}
     </div>
   );
 
   return (
-    <div className="form-container">
-      <h1 className="form-title">Add New Employee</h1>
-      <form onSubmit={handleSubmit} className="employee-form">
+    <div className={styles.container}>
+      <h1 className={styles.title}>Add New Employee</h1>
+
+      <form onSubmit={handleSubmit}>
         {renderInput("name", "text", "Name")}
         {renderInput("title", "text", "Title")}
         {renderInput("salary", "number", "Salary")}
@@ -106,8 +98,15 @@ const AddEmployeeForm = () => {
         {renderInput("startDate", "date", "Start Date")}
         {renderInput("location", "text", "Location")}
         {renderInput("department", "text", "Department")}
-        {renderInput("skills", "text", "Skills")}
-        <button disabled={loading} type="submit" className="submit-button">Add Employee</button>
+        {renderInput("skills", "text", "Skills (comma-separated)")}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className={styles.submitBtn}
+        >
+          {loading ? "Adding..." : "Add Employee"}
+        </button>
       </form>
     </div>
   );

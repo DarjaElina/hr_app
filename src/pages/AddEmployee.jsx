@@ -1,14 +1,8 @@
 import AddEmployeeForm from "../components/AddEmployeeForm/AddEmployeeForm";
-import Header from "../components/Header/Header";
-import Footer from "../components/Footer/Footer";
 
-const AddEmployee = ({onAddEmployee}) => {
+const AddEmployee = () => {
   return (
-    <>
-    <Header/>
-      <AddEmployeeForm onAddEmployee={onAddEmployee}/>
-    <Footer/>
-    </>
+    <AddEmployeeForm/>
   )
 }
 

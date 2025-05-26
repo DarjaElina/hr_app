@@ -1,9 +1,27 @@
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
 import { useEmployeesContext } from "../../hooks/useEmployeeContext";
 import styles from "./EmployeeList.module.css";
+import { ClipLoader } from "react-spinners";
 
 const EmployeeList = () => {
-  const { employees } = useEmployeesContext();
+  const { employees, loading, error } = useEmployeesContext();
+
+  if (loading) {
+    return (
+      <div className={styles.centeredMessage}>
+        <ClipLoader color="#162456" loading={loading} size={40} />
+        <p style={{ marginTop: "1rem" }}>Loading employees...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.centeredMessage}>
+        <p>Something went wrong. Please try again later.</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>

@@ -9,6 +9,17 @@
   gap: 1.5rem;
 }
 
+.centeredMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  font-size: 1.25rem;
+  color: #162456;
+  text-align: center;
+  flex-direction: column;
+}
+
 @media (min-width: 640px) {
   .gridList {
     grid-template-columns: repeat(2, 1fr);

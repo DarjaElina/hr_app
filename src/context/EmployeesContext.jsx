@@ -10,7 +10,6 @@ export const EmployeesProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("use effect is running")
     const fetchEmployees = async () => {
       try {
         const res = await axios.get("https://hr-app-backend-90il.onrender.com/employees/");

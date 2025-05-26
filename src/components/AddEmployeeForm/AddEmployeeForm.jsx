@@ -61,6 +61,18 @@ const AddEmployeeForm = () => {
       };
       await createEmployee(newEmployee);
       toast.success("Employee added successfully!");
+      setFormData({
+        name: "",
+        title: "",
+        salary: "",
+        phone: "",
+        email: "",
+        animal: "",
+        startDate: "",
+        location: "",
+        department: "",
+        skills: "",
+      })
     } catch (err) {
       toast.error("Failed to add employee.", err);
     }

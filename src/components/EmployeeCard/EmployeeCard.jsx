@@ -66,7 +66,7 @@ const EmployeeCard = ({
         skills: parseSkills(skillsInput),
       });
       toast.success("Employee updated successfully");
-      //setIsEditing(false);
+      setIsEditing(false);
     } catch (e) {
       toast.error("Failed to update employee");
       console.error("Failed to update employee: ", e);

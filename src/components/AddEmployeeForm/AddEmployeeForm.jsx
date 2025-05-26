@@ -2,6 +2,7 @@ import { useState } from "react";
 import useCreateEmployee from "../../hooks/useCreateEmployee";
 import styles from "./AddEmployeeForm.module.css";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router";
 
 const AddEmployeeForm = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +20,7 @@ const AddEmployeeForm = () => {
 
   const [errors, setErrors] = useState({});
   const [createEmployee, { loading }] = useCreateEmployee();
+  const navigate = useNavigate();
 
   const validate = () => {
     const newErrors = {};
@@ -51,7 +53,6 @@ const AddEmployeeForm = () => {
     }
 
     setErrors({});
-  
 
     try {
       const newEmployee = {
@@ -72,18 +73,25 @@ const AddEmployeeForm = () => {
         location: "",
         department: "",
         skills: "",
-      })
+      });
+      setTimeout(() => {
+        navigate('/');
+      }, 400);
     } catch (err) {
       toast.error("Failed to add employee.", err);
     }
   };
 
-  const renderInput = (name, type = "text", placeholder) => (
+  const renderInput = (name, type = "text", labelText) => (
     <div className={styles.formGroup}>
+      <label htmlFor={name} className={styles.label}>
+        {labelText}
+      </label>
       <input
+        id={name}
         type={type}
         name={name}
-        placeholder={placeholder}
+        placeholder={type !== "date" ? labelText : undefined}
         value={formData[name]}
         onChange={handleChange}
         className={`${styles.input} ${
@@ -110,7 +118,7 @@ const AddEmployeeForm = () => {
         {renderInput("startDate", "date", "Start Date")}
         {renderInput("location", "text", "Location")}
         {renderInput("department", "text", "Department")}
-        {renderInput("skills", "text", "Skills (comma-separated)")}
+        {renderInput("skills", "text", "Skills")}
 
         <button
           type="submit"

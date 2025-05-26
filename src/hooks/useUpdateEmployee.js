@@ -1,24 +1,34 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useEmployeesContext } from "../hooks/useEmployeeContext";
 
 const useUpdateEmployee = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const updateEmployee = async (id, updatedObj) => {
+  const { setEmployees } = useEmployeesContext();
+
+  const updateEmployee = useCallback(async (id, updatedObj) => {
+    setError(null);
+    setLoading(true);
+
     try {
-      setLoading(true);
-      const {data} = await axios.patch(`http://localhost:3001/employees/${id}`, updatedObj)
-      console.log("data in hook is", data)
+      const { data } = await axios.patch(`https://hr-app-backend-90il.onrender.com/employees/${id}`, updatedObj);
+
+      setEmployees((prev) =>
+        prev.map((emp) => (emp.id === id ? { ...emp, ...data } : emp))
+      );
+
       return data;
     } catch (e) {
       console.error(e);
-      setError({message: "Error creating employee"})
+      setError({ message: "Error updating employee" });
+      throw e;
     } finally {
       setLoading(false);
     }
-    return null;
-  }
-  return [updateEmployee, {loading, error}]
-}
+  }, [setEmployees]);
+
+  return [updateEmployee, { loading, error }];
+};
 
 export default useUpdateEmployee;

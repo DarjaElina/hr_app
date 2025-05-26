@@ -1,28 +1,33 @@
-import EmployeeCard from "../EmployeeCard/EmployeeCard"
-import { useOutletContext } from "react-router";
+import EmployeeCard from "../EmployeeCard/EmployeeCard";
+import { useEmployeesContext } from "../../hooks/useEmployeeContext";
+import styles from "./EmployeeList.module.css";
 
 const EmployeeList = () => {
-  const {employees} = useOutletContext();
+  const { employees } = useEmployeesContext();
+
   return (
-   <ul>
-    {employees.map(p => (
-        <EmployeeCard
-          key={p.id}
-          name={p.name}
-          title={p.title}
-          salary={p.salary}
-          phone={p.phone}
-          email={p.email}
-          animal={p.animal}
-          startDate={p.startDate}
-          location={p.location}
-          department={p.department}
-          skills={p.skills}
-          id={p.id}
-        />
-      ))}
-   </ul>
+    <div className={styles.container}>
+      <ul className={styles.gridList}>
+        {employees.map((p) => (
+          <li key={p.id}>
+            <EmployeeCard
+              name={p.name}
+              title={p.title}
+              salary={p.salary}
+              phone={p.phone}
+              email={p.email}
+              animal={p.animal}
+              startDate={p.startDate}
+              location={p.location}
+              department={p.department}
+              skills={p.skills}
+              id={p.id}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   )
-}
+};
 
 export default EmployeeList;

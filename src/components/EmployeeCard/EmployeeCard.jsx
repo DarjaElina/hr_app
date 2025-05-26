@@ -1,11 +1,10 @@
-import { FaPhone } from "react-icons/fa";
-import { IoIosMail } from "react-icons/io";
-import { FaDollarSign } from "react-icons/fa";
-import './employeeCard.css';
 import { useState } from "react";
-import { useOutletContext } from "react-router";
+import { FaPhone, FaDollarSign, FaEdit } from "react-icons/fa";
+import { IoMail } from "react-icons/io5";
+import { MdLocationOn, MdWork, MdOutlinePets } from "react-icons/md";
 import useUpdateEmployee from "../../hooks/useUpdateEmployee";
-
+import styles from './EmployeeCard.module.css';
+import toast from "react-hot-toast";
 
 const EmployeeCard = ({
   name,
@@ -20,126 +19,206 @@ const EmployeeCard = ({
   skills,
   id,
 }) => {
-  const {setEmployees} = useOutletContext();
-    const [isEditing, setIsEditing] = useState(false);
-    const [updatedEmployee, setUpdatedEmployee] = useState({
-      salary,
-      location,
-      department,
-    });
-    const [skillsInput, setSkillsInput] = useState(skills.join(', '));
-    const [userMessage, setUserMessage] = useState(null);
-    const [updateEmployee, {loading, error}] = useUpdateEmployee();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedEmployee, setUpdatedEmployee] = useState({
+    salary,
+    location,
+    department,
+  });
+  const [skillsInput, setSkillsInput] = useState(skills.join(", "));
+  const [updateEmployee, { loading }] = useUpdateEmployee();
 
-    const calculateWorkingTime = (startDate) => {
-      return {
-        years: new Date().getFullYear() - new Date(startDate).getFullYear(),
-        months:  Math.max(
+  const calculateWorkingTime = (startDate) => {
+    return {
+      years: new Date().getFullYear() - new Date(startDate).getFullYear(),
+      months:
+        Math.max(
           (new Date().getFullYear() - new Date(startDate).getFullYear()) * 12 +
-          new Date().getMonth() -
-          new Date(startDate).getMonth(),
+            new Date().getMonth() -
+            new Date(startDate).getMonth(),
           0
         )
-      }
-    }
-    const isMilestoneYear = calculateWorkingTime(startDate).years !== 0 && calculateWorkingTime(startDate).years % 5 === 0;
-    const isProbation = calculateWorkingTime(startDate).months <= 6;
-    const parseSkills = (skillsString) =>
-      Array.from(new Set(skillsString.split(',').map(s => s.trim()).filter(Boolean)));
-
-   
-
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      if (name === 'skills') {
-        setSkillsInput(value);
-      } else {
-        setUpdatedEmployee((prev) => ({ ...prev, [name]: value }));
-      }
     };
-
-
-    const handleUpdate = async () => {
-      try {
-        const data = await updateEmployee(id, {...updatedEmployee, skills: parseSkills(skillsInput)})
-        setEmployees((prev) => 
-                prev.map((e) => e.id === id ? data : e)
-        );
-        setUserMessage({
-          type: "success",
-          message: "Employee updated successfully"
-        })
-        setTimeout(() => {
-          setUserMessage(null)
-        }, 4000)
-        setIsEditing(false);
-      } catch (e) {
-        setUserMessage({
-          type: "error",
-          message: "Failed to update employee"
-        })
-        setTimeout(() => {
-          setUserMessage(null)
-        }, 4000)
-        console.error("Failed to update employee: ", e);
-      }
-    }
-
-    const handleCancel = () => {
-      setUpdatedEmployee({
-        salary,
-        location,
-        department,
-      });
-      setSkillsInput(skills.join(', '));
-      setIsEditing(false);
-    }
-
-    return (
-      <div className="person-card">
-        {userMessage && <p className={userMessage.type === "error" ? "user-message error" : "user-message"}>{userMessage.message}</p>}
-        <h3>{name}</h3>
-        <p><strong>{title}</strong></p>
-        <p><FaPhone/> {phone}</p>
-        <p><IoIosMail/> {email}</p>
-        {
-          isEditing ?
-          <div className="edit-form">
-            <label htmlFor="">Salary:</label>
-            <input onChange={handleChange} type="text" name="salary" placeholder="Salary" value={updatedEmployee.salary} required/>
-            <label htmlFor="">Location:</label>
-            <input onChange={handleChange} type="text" name="location" placeholder="Location" value={updatedEmployee.location} required/>
-            <label htmlFor="">Department:</label>
-            <input onChange={handleChange} type="text" name="department" placeholder="Department" value={updatedEmployee.department} required/>
-            <label htmlFor="">Skills:</label>
-            <input onChange={handleChange} type="text" name="skills" placeholder="Skills" value={skillsInput}/>
-            <div className="edit-btns">
-              <button onClick={handleUpdate}>Save</button>
-              <button onClick={handleCancel}>Cancel</button>
-            </div>
-          </div> :
-          
-            <>
-              <p><FaDollarSign /> <strong>Salary:</strong> €{salary}</p>
-              <p><strong>Location:</strong> {location}</p>
-              <p><strong>Department:</strong> {department}</p>
-              <p><strong>Skills:</strong></p>
-                <ul>
-                  {skills.length > 0 ? (
-                    skills.map(s => <li key={s}><p>{s}</p></li>)
-                  ) : (
-                    <li><em>No skills listed</em></li>
-                  )}
-                </ul>
-            </>
-          
-        }
-        <p><strong>Favorite animal:</strong> {animal}</p>
-       {isMilestoneYear && <p> 🎉 Schedule recognition meeting.</p>}
-       {isProbation && <p>  🔔 Schedule probation review.</p>}
-       {!isEditing && <button onClick={() => setIsEditing(true)} >Edit</button>}
-      </div>
-    );
   };
+
+  const isMilestoneYear =
+    calculateWorkingTime(startDate).years !== 0 &&
+    calculateWorkingTime(startDate).years % 5 === 0;
+  const isProbation = calculateWorkingTime(startDate).months <= 6;
+
+  const parseSkills = (skillsString) =>
+    Array.from(new Set(skillsString.split(",").map((s) => s.trim()).filter(Boolean)));
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "skills") {
+      setSkillsInput(value);
+    } else {
+      setUpdatedEmployee((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      await updateEmployee(id, {
+        ...updatedEmployee,
+        skills: parseSkills(skillsInput),
+      });
+      toast.success("Employee updated successfully");
+      //setIsEditing(false);
+    } catch (e) {
+      toast.error("Failed to update employee");
+      console.error("Failed to update employee: ", e);
+    }
+    
+  };
+
+  const handleCancel = () => {
+    setUpdatedEmployee({ salary, location, department });
+    setSkillsInput(skills.join(", "));
+    setIsEditing(false);
+  };
+
+  const hasChanges = () => {
+    const simpleFieldsUnchanged =
+      updatedEmployee.salary === salary &&
+      updatedEmployee.location === location &&
+      updatedEmployee.department === department;
   
-  export default EmployeeCard;
+    const originalSkillsSet = new Set(skills.map((s) => s.trim()));
+    const updatedSkillsSet = new Set(parseSkills(skillsInput));
+  
+    const skillsUnchanged =
+      originalSkillsSet.size === updatedSkillsSet.size &&
+      [...originalSkillsSet].every((skill) => updatedSkillsSet.has(skill));
+  
+    return !(simpleFieldsUnchanged && skillsUnchanged);
+  };
+
+  return (
+    <div className={styles.card}>
+
+      <div className={styles.profile}>
+        <div>
+          <h3 className={styles.name}>{name}</h3>
+          <p className={styles.title}>{title}</p>
+        </div>
+      </div>
+
+      <div className={styles.details}>
+  {isExpanded && !isEditing && <p className={styles.detailsSubtitle}>Employee Details</p>}
+  <p className={styles.detailsItem}>
+    <FaPhone className="text-blue-500" /> {phone}
+  </p>
+  <p className={styles.detailsItem}>
+    <IoMail className="text-blue-500" /> {email}
+  </p>
+
+  {isExpanded && !isEditing && (
+    <>
+      <p className={styles.detailsItem}>
+        <FaDollarSign /> Salary: €{salary}
+      </p>
+      <p className={styles.detailsItem}>
+        <MdLocationOn /> Location: {location}
+      </p>
+      <p className={styles.detailsItem}>
+        <MdWork /> Department: {department}
+      </p>
+      <p className={styles.detailsItem}>
+        <MdOutlinePets /> Favorite animal: {animal}
+      </p>
+        <strong>Skills:</strong>{' '}
+        {skills.length ? (
+          <ul className={styles.skillList}>
+            {skills.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
+        ) : (
+          <em>No skills listed</em>
+        )}
+      {isMilestoneYear && <p style={{ marginTop: '0.75rem' }}>🎉 Schedule recognition meeting.</p>}
+      {isProbation && <p style={{ marginTop: '0.75rem' }}>🔔 Schedule probation review.</p>}
+    </>
+  )}
+
+        {isEditing && (
+          <div className={styles.formGroup}>
+            <label className={styles.label}>
+              Salary:
+              <input
+                className={styles.input}
+                onChange={handleChange}
+                type="text"
+                name="salary"
+                value={updatedEmployee.salary}
+                required
+              />
+            </label>
+            <label className={styles.label}>
+              Location:
+              <input
+                className={styles.input}
+                onChange={handleChange}
+                type="text"
+                name="location"
+                value={updatedEmployee.location}
+                required
+              />
+            </label>
+            <label className={styles.label}>
+              Department:
+              <input
+                className={styles.input}
+                onChange={handleChange}
+                type="text"
+                name="department"
+                value={updatedEmployee.department}
+                required
+              />
+            </label>
+            <label className={styles.label}>
+              Skills:
+              <input
+                className={styles.input}
+                onChange={handleChange}
+                type="text"
+                name="skills"
+                value={skillsInput}
+              />
+            </label>
+            <div className={styles.buttonRow}>
+              <button disabled={loading || !hasChanges()} onClick={handleUpdate} className={styles.saveButton}>
+                Save
+              </button>
+              <button onClick={handleCancel} className={styles.cancelButton}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {!isEditing && (
+        <div className={styles.footer}>
+          <button
+            onClick={() => setIsExpanded((prev) => !prev)}
+            className={styles.toggleBtn}
+          >
+            {isExpanded ? 'Show Less' : 'Show More'}
+          </button>
+          <button
+            onClick={() => setIsEditing(true)}
+            className={styles.editBtn}
+          >
+            <FaEdit /> Edit
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default EmployeeCard;

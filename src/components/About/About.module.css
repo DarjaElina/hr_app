@@ -1,0 +1,87 @@
+.container {
+  background-image: url('/images/bg-800w.webp');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  color: white;
+  position: relative;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
+
+/* Responsive background images */
+@media (max-width: 400px) {
+  .container {
+    background-image: url('/images/bg-400w.webp');
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    background-image: url('/images/bg-600w.webp');
+  }
+}
+
+@media (max-width: 800px) {
+  .container {
+    background-image: url('/images/bg-800w.webp');
+  }
+}
+
+@media (max-width: 1000px) {
+  .container {
+    background-image: url('/images/bg-1000w.webp');
+  }
+}
+
+@media (max-width: 1200px) {
+  .container {
+    background-image: url('/images/bg-1200w.webp');
+  }
+}
+
+@media (max-width: 1600px) {
+  .container {
+    background-image: url('/images/bg-1600w.webp');
+  }
+}
+
+@media (min-width: 1601px) {
+  .container {
+    background-image: url('/images/bg-2000w.webp');
+  }
+}
+
+
+.heading {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  z-index: 1;
+  position: relative;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+}
+
+.text {
+  max-width: 600px;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  z-index: 1;
+  position: relative;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}

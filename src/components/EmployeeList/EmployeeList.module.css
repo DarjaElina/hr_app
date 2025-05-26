@@ -1,0 +1,28 @@
+.container {
+  padding: 1rem;
+  padding-bottom: 5rem;
+}
+
+.gridList {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .gridList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .gridList {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .gridList {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

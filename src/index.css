@@ -1,42 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --bg-color: #ffffff;
-    --text-color: #2e2e2e;
-    --muted-text: #555;
-    --accent: #3FC1C9;
-    --card-bg: #f9f9f9;
-    --header-footer-bg: #f1f1f1;
-    --border-color: #e0e0e0;
-    --radius: 10px;
 }
 
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Inter', sans-serif;
-    padding-top: 80px;
-    padding-bottom: 60px;
-    line-height: 1.6;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #eef2ff;
 }
 
-a {
-    color: var(--accent);
-    text-decoration: none;
-}
-
-img {
-    max-width: 100%;
-    display: block;
+button {
+    border: none;
+    cursor: pointer;
 }
 
 li {
-    list-style: none;
+    list-style-type: none;
 }
-

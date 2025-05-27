@@ -58,7 +58,10 @@ const AddEmployeeForm = () => {
       const newEmployee = {
         ...formData,
         salary: parseFloat(formData.salary),
-        skills: formData.skills.trim().split(','),
+        skills: formData.skills
+        .split(',')
+        .map(skill => skill.trim())
+        .filter(skill => skill.length > 0),
       };
       await createEmployee(newEmployee);
       toast.success("Employee added successfully!");

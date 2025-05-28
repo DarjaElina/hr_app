@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useEmployeesContext } from "../hooks/useEmployeeContext";
+import { BACKEND_URL } from "../../config";
 
 const useCreateEmployee = () => {
   const { setEmployees } = useEmployeesContext();
@@ -10,7 +11,7 @@ const useCreateEmployee = () => {
   const createEmployee = async (newEmployee) => {
     try {
       setLoading(true);
-      const res = await axios.post("https://hr-app-backend-90il.onrender.com/employees", newEmployee);
+      const res = await axios.post(`${BACKEND_URL}/employees`, newEmployee);
 
       setEmployees(prev => [...prev, res.data]);
       return res.data;

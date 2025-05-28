@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useCallback } from "react";
 import { useEmployeesContext } from "../hooks/useEmployeeContext";
+import { BACKEND_URL } from "../../config";
 
 const useUpdateEmployee = () => {
   const [loading, setLoading] = useState(false);
@@ -12,7 +13,7 @@ const useUpdateEmployee = () => {
     setLoading(true);
 
     try {
-      const { data } = await axios.patch(`https://hr-app-backend-90il.onrender.com/employees/${id}`, updatedObj);
+      const { data } = await axios.patch(`${BACKEND_URL}/employees/${id}`, updatedObj);
 
       setEmployees((prev) =>
         prev.map((emp) => (emp.id === id ? { ...emp, ...data } : emp))

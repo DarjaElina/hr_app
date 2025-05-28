@@ -1,6 +1,6 @@
-// EmployeesProvider.jsx
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../../config";
 
 export const EmployeesContext = createContext();
 
@@ -12,7 +12,7 @@ export const EmployeesProvider = ({ children }) => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await axios.get("https://hr-app-backend-90il.onrender.com/employees/");
+        const res = await axios.get(`${BACKEND_URL}/employees/`);
         setEmployees(res.data);
       } catch (err) {
         setError(err);
